@@ -61,3 +61,11 @@ Sound is an opt-in toggle (light forge tick/chime; no autoplay dependence). A co
 - Rekindling pays the previewed reward and performs only the specified reset.
 - Keyboard/touch, reduced motion, narrow layout, and insufficient-funds behavior work.
 - No required network or account is needed to play after assets load.
+
+## v1.1: compact playfield and ember burst
+
+The main game fills the dynamic viewport without page or shop scrolling. Portrait phones show two-column companion/upgrade grids; landscape and desktop keep the scene beside the shop. Small screens condense narrative copy and milestone icons while keeping currency, progression, rebirth, settings and every purchase reachable. Settings remain a modal with overflow for short screens.
+
+Hold the forge (pointer or Space/Enter) for 1 second to charge a 5-second burst: 40 automatic strikes at the current click strength, followed by 10 seconds of recharge. A short tap still grants one strike. Releasing after charging does not add a duplicate strike. Cancellation, window blur and hidden tabs clear held input; interrupted bursts stop and recharge. Burst time is active-session-only and does not add offline earnings. Import, reset and rebirth clear transient burst state.
+
+Firelight, drifting fireflies, press compression, impact flashes, spark showers and floating currency accompany input; a meter shows charge, burst time and recharge. Optional vibration uses the browser Vibration API where supported, with visual feedback on all devices. Reduced-motion preferences disable decorative animation and flashes. Touch-action rules suppress double-tap zoom on the game and preserve browser pinch zoom outside the forge control.

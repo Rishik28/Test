@@ -10,7 +10,7 @@ Requires only a static HTTP server, for example:
 python3 -m http.server 8000 --directory dist
 ```
 
-Open http://localhost:8000. Progress is stored in this browser; settings include save export/import and reset. Offline production is capped at eight hours.
+Open http://localhost:8000. Tap the forge for embers, or hold it (or Space/Enter) for one second to unleash a five-second burst. Bursts recharge for ten seconds. The responsive game fits a single viewport. Progress is stored in this browser; settings include save export/import and reset. Offline production is capped at eight hours.
 
 ## Project
 
