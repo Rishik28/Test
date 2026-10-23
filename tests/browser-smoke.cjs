@@ -1,0 +1,34 @@
+// Run against a static server: BASE_URL=http://127.0.0.1:8080 node tests/browser-smoke.cjs
+const assert=require('node:assert/strict');
+const {chromium}=require('playwright');
+(async()=>{
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+ const page=await browser.newPage({viewport:{width:1440,height:1000}}), errors=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(process.env.BASE_URL||'http://127.0.0.1:8080');
+ for(let i=0;i<15;i++) await page.locator('#strike').click();
+ await page.waitForTimeout(200);
+ assert.equal(await page.locator('#embers').textContent(),'15');
+ await page.locator('[data-worker="sprite"]').click();
+ assert.equal(await page.locator('[data-card="sprite"] .owned').textContent(),'1 owned');
+ await page.waitForTimeout(1500);
+ assert.ok(parseFloat(await page.locator('#embers').textContent())>0);
+ await page.locator('#tab-upgrades').click();
+ assert.equal(await page.locator('[data-upgrade]').count(),6);
+ await page.locator('#settings').click();
+ assert.ok(await page.locator('#settings-dialog').evaluate(d=>d.open));
+ await page.locator('#save-now').click();
+ await page.locator('.dialog-close').click();
+ await page.reload();
+ assert.equal(await page.locator('[data-card="sprite"] .owned').textContent(),'1 owned');
+ await page.screenshot({path:'/tmp/embergrove-desktop.png',fullPage:true});
+ await page.setViewportSize({width:390,height:844});
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+ await page.screenshot({path:'/tmp/embergrove-mobile.png',fullPage:true});
+ await page.locator('#settings').click();
+ page.once('dialog',d=>d.dismiss());await page.locator('#reset').click();
+ assert.ok(await page.locator('#settings-dialog').evaluate(d=>d.open));
+ page.once('dialog',d=>d.accept());await page.locator('#reset').click();
+ assert.equal(await page.locator('#embers').textContent(),'0');
+ assert.deepEqual(errors,[]);await browser.close();console.log('Browser smoke passed');
+})().catch(e=>{console.error(e);process.exitCode=1});
