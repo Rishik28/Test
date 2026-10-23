@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "name": "Embergrove forest forge",
+  "generator": "image_gen.imagegen",
+  "promptFile": "art/forge.prompt.txt",
+  "generationArguments": { "transparent_background": false },
+  "api": { "model": "gpt-image-1", "size": "1536x1024", "quality": "high", "output_format": "png" },
+  "output": "dist/assets/forge.png",
+  "expected": { "width": 1536, "height": 1024, "format": "png" },
+  "review": ["No text or UI", "Crisp pixel clusters", "Amber forge focal point", "Teal forest framing", "Safe broad cropping"],
+  "generation": { "status": "generated-and-reviewed", "date": "2026-10-23" }
+}

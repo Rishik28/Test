@@ -1,0 +1,11 @@
+import { readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+const root = new URL('../', import.meta.url);
+const manifest = JSON.parse(await readFile(new URL('art/pipeline.json', root), 'utf8'));
+const path = new URL(manifest.output, root);
+const bytes = await readFile(path);
+const signature = Buffer.from([137,80,78,71,13,10,26,10]);
+if (!bytes.subarray(0, 8).equals(signature)) throw new Error('Generated asset is not a PNG');
+const width = bytes.readUInt32BE(16), height = bytes.readUInt32BE(20);
+if (width !== manifest.expected.width || height !== manifest.expected.height) throw new Error(`Unexpected dimensions ${width}x${height}`);
+console.log(`Art verified: ${fileURLToPath(path)} (${width}x${height}, ${bytes.length} bytes)`);
