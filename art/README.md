@@ -1,4 +1,20 @@
-# Embergrove image pipeline
+# Oddfolk image pipeline
+
+## Current game: ODDFOLK — FLAX / OLIVE
+
+`selected-pipeline.json` is the current asset manifest. The earlier forge image and pipeline remain as history. Current assets were generated concurrently through `image_gen.imagegen` and visually inspected against the selected FLAX / OLIVE board; no cancelled colorful assets are used.
+
+| Asset | Native size | Layout | Notes |
+| --- | --- | --- | --- |
+| `village.png` | 1536 × 1024 | Environment | Open cobbles in lower half; bell tower near 69% x, 35% y |
+| `piper.png` | 2172 × 724 | 4 columns × 1 row | Transparent RGBA, 543 × 724 cells, inhale/squeeze/left step/right step |
+| `dancer.png` | 2172 × 724 | 4 columns × 1 row | Transparent RGBA, 543 × 724 cells, four dance poses |
+
+Sprite CSS can use `background-size: 400% 100%` with positions `0%`, `33.333%`, `66.667%`, `100%`. Each frame has a 3:4 cell aspect; feet are near 94% of canvas height. Keep the whole cell for coherent animation. Pixel render at modest sizes. Sheets contain genuine changing poses rather than CSS motion on a single drawing.
+
+To regenerate all current art through the agent tool, read each asset's promptFile and generationArguments from `selected-pipeline.json`, invoke `image_gen.imagegen` independently (parallel where available), inspect each result, and copy returned PNGs to their output paths. Preserve original generations. The expected sprite dimensions document the shipped artifacts; a different generated size must still divide equally into four columns and requires manifest/CSS review. `node art/verify.mjs` validates all current PNG dimensions, alpha channel presence, and equal cells plus the historical forge.
+
+The CLI below regenerates only the historical forge, whose dimensions are supported by its configured API model. Current 3:1 transparent sheets use the image-generation agent tool; do not silently crop or stretch a new API output to match them.
 
 The generated forge scene is served from `dist/assets/forge.png`.
 

@@ -46,10 +46,10 @@ const {chromium}=require('playwright');
  const interrupted=await balance();await page.clock.runFor(6000);
  assert.equal(await balance(),interrupted,'blur stops burst and clears held input');
  assert.ok(interrupted>123&&interrupted<163,'interrupted burst only pays completed strikes');
- await page.screenshot({path:'/tmp/embergrove-v11-mobile.png',fullPage:true});
- await page.setViewportSize({width:1440,height:900});await page.screenshot({path:'/tmp/embergrove-v11-desktop.png',fullPage:true});
+ await page.screenshot({path:'/tmp/oddfolk-mobile.png',fullPage:true});
+ await page.setViewportSize({width:1440,height:900});await page.screenshot({path:'/tmp/oddfolk-desktop.png',fullPage:true});
  await page.emulateMedia({reducedMotion:'reduce'});
- assert.equal(await page.locator('.target-symbol').evaluate(e=>getComputedStyle(e).animationName),'none');
+ assert.equal(await page.locator('#strike .actor-sprite').evaluate(e=>getComputedStyle(e).animationName),'none');
  assert.deepEqual(errors,[]);console.log('Viewport, pointer/keyboard burst, cancellation, rapid touch and reduced-motion checks passed.');
  } finally {await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

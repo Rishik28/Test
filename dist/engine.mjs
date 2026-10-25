@@ -1,16 +1,16 @@
 export const WORKERS = [
- {id:'sprite',name:'Spark sprite',role:'A little light. A lot of potential.',icon:'✦',base:15,rate:.2,color:'gold'},
- {id:'tender',name:'Moss tender',role:'Tending the forest’s ancient warmth.',icon:'♣',base:100,rate:1.5,color:'green'},
- {id:'fox',name:'Forge fox',role:'Quick paws keep the bellows breathing.',icon:'◆',base:650,rate:8,color:'orange'},
- {id:'golem',name:'Ancient golem',role:'A sleeping giant, rekindled.',icon:'▣',base:4000,rate:40,color:'blue'}
+ {id:'sprite',name:'Piper',role:'One small tune. A village full of possibility.',icon:'♪',base:15,rate:.2,color:'gold'},
+ {id:'tender',name:'Dancer',role:'A happy little jig to lift everyone’s spirits.',icon:'♬',base:100,rate:1.5,color:'green'},
+ {id:'fox',name:'Baker',role:'Warm bread and excellent company.',icon:'◒',base:650,rate:8,color:'orange'},
+ {id:'golem',name:'Bell',role:'Ring out the good news across the square.',icon:'♩',base:4000,rate:40,color:'blue'}
 ];
 export const UPGRADES = [
- {id:'hammer',name:'Copper poker',desc:'Double embers from each strike.',cost:50,type:'click',factor:2},
- {id:'bellows',name:'Iron bellows',desc:'Triple embers from each strike.',cost:300,type:'click',factor:3},
- {id:'coals',name:'Living coals',desc:'Double all companion production.',cost:750,type:'production',factor:2},
- {id:'moonhammer',name:'Moonsteel hammer',desc:'Four times the embers per strike.',cost:2500,type:'click',factor:4},
- {id:'heart',name:'Heartwood furnace',desc:'Double all companion production.',cost:6000,type:'production',factor:2},
- {id:'star',name:'Starfire crucible',desc:'Triple all companion production.',cost:25000,type:'production',factor:3}
+ {id:'hammer',name:'Wooden whistle',desc:'Double JOY from each tap.',cost:50,type:'click',factor:2},
+ {id:'bellows',name:'Sunday songbook',desc:'Triple JOY from each tap.',cost:300,type:'click',factor:3},
+ {id:'coals',name:'Dancing shoes',desc:'Double all villagers’ JOY production.',cost:750,type:'production',factor:2},
+ {id:'moonhammer',name:'Silver flute',desc:'Four times the JOY per tap.',cost:2500,type:'click',factor:4},
+ {id:'heart',name:'Village feast',desc:'Double all villagers’ JOY production.',cost:6000,type:'production',factor:2},
+ {id:'star',name:'Grand festival',desc:'Triple all villagers’ JOY production.',cost:25000,type:'production',factor:3}
 ];
 export function freshState(){return {version:1,embers:0,runEarned:0,totalEarned:0,clicks:0,seeds:0,prestiges:0,workers:Object.fromEntries(WORKERS.map(w=>[w.id,0])),upgrades:[],savedAt:Date.now(),sound:false};}
 export const cost=(w,n)=>Math.ceil(w.base*Math.pow(1.15,n));

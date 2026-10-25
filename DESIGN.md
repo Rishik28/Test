@@ -1,71 +1,43 @@
-# Embergrove — systems design
+# Oddfolk — flax and olive
 
-A quiet woodland forge wakes one ember at a time. The player stokes a central forge, recruits forest workers, improves tools, and eventually rekindles the grove for permanent growth.
+A Flemish village becomes livelier through music, dancing, bread and bell-ringing. The selected direction combines crisp pixel-art scenery and characters with modern oversized typography, cutout shapes and muted print graphics. Palette: flax `#e3ddcb`, charcoal olive `#30362e`, dusty sage `#8c977b`, restrained ochre `#b7a574`.
 
-## Core loop
+## Play
 
-**Stoke → hire → improve → rekindle.** Start with 0 embers and 1 ember per click. Embers are both spendable currency and production output. Show current balance, effective click strength, embers per second, and run-earned embers. Buying things never reduces run-earned embers.
+Tap the piper or bell to earn JOY. Hold either (or Space/Enter) for one second to begin a five-second frenzy: 40 notes at the current tap strength, then ten seconds of recharge. Short taps earn one note. Pointer cancellation, blur and hidden tabs clear held input and stop active frenzies. Notes already earned remain. Import, reset and Reprise clear transient input state. No frenzy income accrues offline.
 
-Use one continuous screen: title/status at top, large illustrated forge in the center-left, recruit/upgrade cards to the right, and compact milestone/prestige panels below. The forge is a native button usable with pointer, touch, Enter, or Space. Floating `+N` feedback makes every strike visible. Respect reduced motion. Avoid forcing rapid tapping for basic progress.
+Recruit villagers for passive income. Each worker costs `ceil(base * 1.15 ** owned)`. Bulk UI purchases require the displayed full batch cost. The pure engine can buy an affordable partial batch. Spending does not reduce run/lifetime earned JOY.
 
-## Economy
+| Villager | Preserved ID | Base cost | JOY/sec each |
+| --- | --- | ---: | ---: |
+| Piper | sprite | 15 | 0.2 |
+| Dancer | tender | 100 | 1.5 |
+| Baker | fox | 650 | 8 |
+| Bell | golem | 4,000 | 40 |
 
-| Worker | Base cost | Base output/sec | Fiction |
-| --- | ---: | ---: | --- |
-| Spark Sprite | 15 | 0.2 | Carries a glowing coal |
-| Moss Tender | 100 | 1.5 | Feeds the woodland furnace |
-| Forge Fox | 650 | 8 | Hammers enchanted iron |
-| Ancient Golem | 4,000 | 40 | Keeps the great bellows breathing |
+At 10, 25 and 50 of a worker, that type's output doubles cumulatively. Multiply the sum by purchased production upgrades and renown multiplier. Tap upgrades multiply tap yield. Renown applies once to each income source.
 
-For a worker with `n` owned, next cost is `ceil(baseCost * 1.15 ** n)`. Its total output is `n * baseOutput * tierMultiplier`. At 10, 25, and 50 owned, that worker's tier multiplier doubles (2×, 4×, then 8× cumulative). Milestones are automatic and always derivable from counts, with a toast when reached. All worker types are visible from the start; unaffordable cards remain readable and show their price. Batch purchases require the full displayed batch cost.
+| Upgrade | Preserved ID | Cost | Effect |
+| --- | --- | ---: | --- |
+| Wooden whistle | hammer | 50 | Taps ×2 |
+| Sunday songbook | bellows | 300 | Taps ×3 |
+| Dancing shoes | coals | 750 | Production ×2 |
+| Silver flute | moonhammer | 2,500 | Taps ×4 |
+| Village feast | heart | 6,000 | Production ×2 |
+| Grand festival | star | 25,000 | Production ×3 |
 
-Effective passive output is `sum(workerOutput) * globalProductionMultiplier * seedMultiplier`. Effective click output is `baseClick * clickUpgradeMultiplier * seedMultiplier`. Use floating-point balances internally and sensible display rounding. Clamp purchase amounts to integers and refuse purchases atomically when funds are insufficient.
+Reprise unlocks at 100,000 run-earned JOY. Reward is `floor(sqrt(runEarned / 100000))` renown. Every point adds 10% to taps and passive production, additively. Reprise resets currency, workers, run earnings and upgrades, preserving lifetime earnings, renown and settings. Confirmation previews reward/reset.
 
-## One-time upgrades
+Lifetime narrative milestones remain at 100, 1K, 10K, 100K, 1M and 10M JOY. They grant no hidden multiplier.
 
-| Upgrade | Cost | Effect |
-| --- | ---: | --- |
-| Copper Poker | 50 | Click output ×2 |
-| Iron Bellows | 300 | Click output ×3 (6 total) |
-| Living Coals | 750 | All passive output ×2 |
-| Moonsteel Hammer | 2,500 | Click output ×4 (24 total) |
-| Heartwood Furnace | 6,000 | All passive output ×2 (4 total) |
-| Starfire Crucible | 25,000 | All passive output ×3 (12 total) |
+## Animation and visual progression
 
-Purchased upgrades visibly change state and cannot be repurchased. Show an upgrade's actual effect, not an ambiguous level number. Workers and upgrades have clearly labeled tabs; upgrades show a remaining count.
+The piper and dancer have four-frame transparent sheets; CSS switches between equally sized cells with discrete frame timing. Taps animate the piper for 800ms. Frenzies animate all sprites faster. Owned Dancers, Bakers and Bells reveal additional figures in the square (supporting figures reuse the two available sprite sheets). Village stage advances at population 1/5/15 or run earnings 1K/10K; higher stages reveal extra ambient figures and festival flags. Bell input swings the bell icon. Reduced motion freezes frame animation and removes decorative bursts.
 
-## Progress and rekindling
+The scene backdrop is painted pixel art with an open foreground for actual animated figures. It does not replace the sprite layer. Touch targets live on the piper and bell. The page and shop fit one dynamic viewport at tested phone/desktop dimensions; short screens condense secondary copy. Native settings dialogs allow scrolling. Text remains real HTML.
 
-Lifetime milestones: **First light** at 100 lifetime-earned embers, **A warmer welcome** at 1,000, **The grove awakens** at 10,000, **Ancient magic** at 100,000, **A forest of fireflies** at 1,000,000, and **An everlasting flame** at 10,000,000. Milestones are narrative rewards; they do not secretly change the economy and persist across rekindling. The current objective shows progress to the next milestone.
+## Saving and compatibility
 
-Rekindling unlocks at **100,000 run-earned embers**. Preview reward as `floor(sqrt(runEarned / 100000))` Grove Seeds. Each permanent seed provides **+10%** to clicks and passive production, additive with other seeds: `seedMultiplier = 1 + totalSeeds * 0.1`. Rekindling adds the previewed seeds, then resets currency, run-earned embers, workers, and purchased upgrades. Preserve total seeds, lifetime-earned embers, settings, and rekindle count. Confirm this reset in an in-game dialog describing the precise reward and reset. Never grant zero seeds or allow a double-trigger.
+For existing players, retain `embergrove-save-v1`, schema version1, `embers` (displayed as JOY), `seeds` (renown), worker IDs and upgrade IDs. This is a visual/narrative migration, not an economy reset. Saved exports use `oddfolk-save.json`; old exports import normally.
 
-## Saving and offline progress
-
-Autosave to a versioned localStorage key every 5 seconds, after purchases, after rekindling, and on page hide. Save balance, run/lifetime earnings, worker counts, upgrade IDs, seeds, rekindle count, settings, and last-update timestamp. Show a small saved indicator; storage failure should leave the game playable and show a nonblocking status.
-
-On load, validate every numeric field as finite and nonnegative, worker counts as safe integers, and upgrade IDs against the known list. Ignore malformed saves without crashing. Offline reward is `savedEffectiveEPS * min(max(elapsedSeconds, 0), 28800)` (8-hour cap), awarded to balance plus run/lifetime earnings. A brief “While you were away” summary appears for rewards of at least one ember. Update the timestamp immediately to prevent repeated offline claims on reload. Active animation ticks use actual elapsed time capped at eight hours per resumed tick. A future clock timestamp grants no offline reward. Settings also provide save export/import and a confirmed full reset.
-
-## Feel and presentation
-
-16-bit pixel-art woodland at twilight: charcoal navy shadows, moss greens, copper framing, honey-gold type accents, and bright orange embers. Main scene: small stone forge beneath a great old tree, tiny smith/fox silhouette, fireflies, and warm window light. Preserve crisp nearest-neighbor image rendering; actual text stays selectable HTML for readability. Dark beveled panels and restrained pixel borders should support the scene without overwhelming it.
-
-Sound is an opt-in toggle (light forge tick/chime; no autoplay dependence). A concise strike hint and visible first-worker price introduce the loop. Large numbers use compact K/M/B suffixes. Mobile stacks the forge above the shop. At 320px width, all actions remain reachable without horizontal scrolling.
-
-## Acceptance criteria
-
-- A fresh game earns currency immediately, buys the first worker at 15, and produces while idle.
-- Purchase and upgrade prices are exact; affordability and displayed output update immediately.
-- The 10th worker applies the tier bonus exactly once; prestige bonuses apply once to each income source.
-- Save/load preserves state, accounts for offline time once, handles corrupted saves, and obeys the 8-hour cap.
-- Rekindling pays the previewed reward and performs only the specified reset.
-- Keyboard/touch, reduced motion, narrow layout, and insufficient-funds behavior work.
-- No required network or account is needed to play after assets load.
-
-## v1.1: compact playfield and ember burst
-
-The main game fills the dynamic viewport without page or shop scrolling. Portrait phones show two-column companion/upgrade grids; landscape and desktop keep the scene beside the shop. Small screens condense narrative copy and milestone icons while keeping currency, progression, rebirth, settings and every purchase reachable. Settings remain a modal with overflow for short screens.
-
-Hold the forge (pointer or Space/Enter) for 1 second to charge a 5-second burst: 40 automatic strikes at the current click strength, followed by 10 seconds of recharge. A short tap still grants one strike. Releasing after charging does not add a duplicate strike. Cancellation, window blur and hidden tabs clear held input; interrupted bursts stop and recharge. Burst time is active-session-only and does not add offline earnings. Import, reset and rebirth clear transient burst state.
-
-Firelight, drifting fireflies, press compression, impact flashes, spark showers and floating currency accompany input; a meter shows charge, burst time and recharge. Optional vibration uses the browser Vibration API where supported, with visual feedback on all devices. Reduced-motion preferences disable decorative animation and flashes. Touch-action rules suppress double-tap zoom on the game and preserve browser pinch zoom outside the forge control.
+Autosave every5 seconds, after purchases/reprise, and on page hide. One monotonic clock settles pending passive production before writes. On load, validate numbers/counts/upgrades and award up to8 hours offline production, then immediately save the new timestamp. Future timestamps award nothing. Storage failures leave the game playable and report that local saving is unavailable.

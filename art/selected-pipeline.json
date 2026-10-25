@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "name": "ODDFOLK FLAX / OLIVE",
+  "generated": "2026-10-24",
+  "assets": [
+    {
+      "name": "village",
+      "promptFile": "art/village.prompt.txt",
+      "output": "dist/assets/village.png",
+      "expected": {
+        "width": 1536,
+        "height": 1024,
+        "format": "png",
+        "alpha": false
+      },
+      "frames": {
+        "columns": 1,
+        "rows": 1
+      },
+      "generationArguments": {
+        "transparent_background": false
+      },
+      "generator": "image_gen.imagegen",
+      "reviewed": true
+    },
+    {
+      "name": "piper",
+      "promptFile": "art/piper.prompt.txt",
+      "output": "dist/assets/piper.png",
+      "expected": {
+        "width": 2172,
+        "height": 724,
+        "format": "png",
+        "alpha": true
+      },
+      "frames": {
+        "columns": 4,
+        "rows": 1
+      },
+      "generationArguments": {
+        "transparent_background": true
+      },
+      "generator": "image_gen.imagegen",
+      "reviewed": true
+    },
+    {
+      "name": "dancer",
+      "promptFile": "art/dancer.prompt.txt",
+      "output": "dist/assets/dancer.png",
+      "expected": {
+        "width": 2172,
+        "height": 724,
+        "format": "png",
+        "alpha": true
+      },
+      "frames": {
+        "columns": 4,
+        "rows": 1
+      },
+      "generationArguments": {
+        "transparent_background": true
+      },
+      "generator": "image_gen.imagegen",
+      "reviewed": true
+    }
+  ],
+  "preservedHistory": [
+    "dist/assets/forge.png"
+  ]
+}
